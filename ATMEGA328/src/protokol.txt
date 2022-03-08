@@ -1,0 +1,45 @@
+DESKRIPSI PROTOKOL KOMUNIKASI ATMEGA328 <-> STM32F401
+Oleh:
+Reyhan Issatyadi
+
+
+Komunikasi antara ATMEGA328 dengan STM32F401 direalisasikan menggunakan antarmuka serial UART.
+Kecepatan data: 1 Mbps
+Bit           : 8
+Paritas       : Tidak ada
+Stop Bit      : 2
+
+Format protokol komunikasi dapat digambarkan sebagai berikut:
+
+1) STM32F401 --> ATMEGA328
+   ----------------------------------------
+   | Command | Command Value | ACK (0x06) |
+   ----------------------------------------
+    (1-byte)      (2-byte)      (1-byte)
+
+2) ATMEGA328 --> STM32F401
+   --------------------
+   | Data Value (ADC) |
+   --------------------
+         (2-byte)
+
+Daftar command:
+--------------------------------------------
+Command       Value         Keterangan
+--------------------------------------------
+'L'           0x0000        LED orange off
+              0x0001        LED orange on
+--------------------------------------------
+'C'           0x0000-       Set channel MUX
+              0x0007        (X0-X7)
+--------------------------------------------
+'S'           0x0000        S/H Hold
+              0x0001        S/H Sample
+--------------------------------------------
+'A'           xxxxx         Baca ADC1
+                            dan ADC2
+              0x0003        ADC2 semua ch.
+--------------------------------------------
+'D'           0x0000-       Set output DAC
+              0x0FFF        (0-4095)
+--------------------------------------------
