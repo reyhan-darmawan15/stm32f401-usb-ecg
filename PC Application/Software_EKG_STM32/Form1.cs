@@ -59,6 +59,9 @@ namespace Software_EKG_STM32
         bool dataReceived = false;
         bool serialPendingClose = false;
         bool recordStart = false;
+        StringBuilder sbLPFSelection = new StringBuilder();
+        StringBuilder sbHPFSelection = new StringBuilder();
+        StringBuilder sbPLFSelection = new StringBuilder();
 
         double samplingFreqBase = 500.0;
 
@@ -88,7 +91,7 @@ namespace Software_EKG_STM32
         // Teks header
         ScottPlot.Plottable.Text PlotHeaderInstituteName;
         ScottPlot.Plottable.Text PlotHeaderPatientName;
-        ScottPlot.Plottable.Text PlotHeaderBirthDate;
+        ScottPlot.Plottable.Text PlotHeaderAge;
         ScottPlot.Plottable.Text PlotHeaderSex;
         ScottPlot.Plottable.Text PlotHeaderPatientID;
         ScottPlot.Plottable.Text PlotHeaderNotes;
@@ -205,8 +208,6 @@ namespace Software_EKG_STM32
             plotRealtimeEKG.Plot.YAxis.ManualTickSpacing(0.5);
             plotRealtimeEKG.Plot.XAxis.Ticks(false);
             plotRealtimeEKG.Plot.YAxis.Ticks(false);
-            plotRealtimeEKG.Plot.Width = 2245;
-            plotRealtimeEKG.Plot.Height = 1587;
             // Teks status pengaturan dan header
             Bitmap logoUnila = new Bitmap(Properties.Resources.logo_unila);
             PlotLogoUnila = plotRealtimeEKG.Plot.AddImage(logoUnila, -1.1, 17.8);
@@ -227,7 +228,7 @@ namespace Software_EKG_STM32
             PlotFooterOperator = plotRealtimeEKG.Plot.AddText("Direkam oleh:", -1.0, 0.0, 16.0f, Color.Black);
             PlotFooterDateTime = plotRealtimeEKG.Plot.AddText(DateTime.Now.ToString(), 3.0, 0.0, 16.0f, Color.Black);
             PlotHeaderPatientName = plotRealtimeEKG.Plot.AddText("Nama:", 2.4, 17.8, 16.0f, Color.Black);
-            PlotHeaderBirthDate = plotRealtimeEKG.Plot.AddText( "Tgl. Lahir:", 2.4, 17.3, 16.0f, Color.Black);
+            PlotHeaderAge = plotRealtimeEKG.Plot.AddText( "Usia:", 2.4, 17.3, 16.0f, Color.Black);
             PlotHeaderSex = plotRealtimeEKG.Plot.AddText("Jenis Kelamin:", 2.4, 16.8, 16.0f, Color.Black);
             PlotHeaderPatientID = plotRealtimeEKG.Plot.AddText("ID: " + tbRecord_ID.Text, 2.4, 16.3, 16.0f, Color.Black);
             PlotHeaderNotes = plotRealtimeEKG.Plot.AddText("CATATAN:" + Environment.NewLine, 5.5, 17.8, 14.0f, Color.Black);
@@ -379,22 +380,30 @@ namespace Software_EKG_STM32
                     {
                         case "40 Hz":
                             usbTxData[1] = 0;
+                            sbLPFSelection.Clear();
+                            sbLPFSelection.Append("40 Hz");
                             break;
                         case "75 Hz":
                             usbTxData[1] = 1;
+                            sbLPFSelection.Clear();
+                            sbLPFSelection.Append("75 Hz");
                             break;
                         case "150 Hz":
                             usbTxData[1] = 2;
+                            sbLPFSelection.Clear();
+                            sbLPFSelection.Append("150 Hz");
                             break;
                     }
                     usbTxData[4] = 1;
                     serial.Write(usbTxData, 0, 5);
                     Thread.Sleep(100);
                     // 2. High-Pass Filter
-                    usbTxData[0] = Convert.ToByte('H'); ;
+                    usbTxData[0] = Convert.ToByte('H');
                     if (chbFilterHPOn.CheckState == CheckState.Unchecked)
                     {
                         usbTxData[1] = 0;
+                        sbHPFSelection.Clear();
+                        sbHPFSelection.Append("Off");
                     }
                     else
                     {
@@ -402,9 +411,13 @@ namespace Software_EKG_STM32
                         {
                             case "0,25 Hz":
                                 usbTxData[1] = 1;
+                                sbHPFSelection.Clear();
+                                sbHPFSelection.Append("0.25 Hz");
                                 break;
                             case "0,5 Hz":
                                 usbTxData[1] = 2;
+                                sbHPFSelection.Clear();
+                                sbHPFSelection.Append("0.5 Hz");
                                 break;
                         }
                     }
@@ -417,9 +430,13 @@ namespace Software_EKG_STM32
                     {
                         case CheckState.Unchecked:
                             usbTxData[1] = 0;
+                            sbPLFSelection.Clear();
+                            sbPLFSelection.Append("Off");
                             break;
                         case CheckState.Checked:
                             usbTxData[1] = 1;
+                            sbPLFSelection.Clear();
+                            sbPLFSelection.Append("On");
                             break;
                     }
                     usbTxData[4] = 1;
@@ -481,6 +498,8 @@ namespace Software_EKG_STM32
                     usbTxData[1] = 0;
                     usbTxData[4] = 1;
                     PlotStatusHPF.Label = "HPF mati";
+                    sbHPFSelection.Clear();
+                    sbHPFSelection.Append("Off");
                     break;
                 case CheckState.Checked:
                     cbFilterHP.Enabled = true;
@@ -489,11 +508,15 @@ namespace Software_EKG_STM32
                     {
                         usbTxData[1] = 1;
                         PlotStatusHPF.Label = "HPF 0,25 Hz";
+                        sbHPFSelection.Clear();
+                        sbHPFSelection.Append("0.25 Hz");
                     }
                     if (cbFilterHP.SelectedItem.ToString() == "0,5 Hz")
                     {
                         usbTxData[1] = 2;
                         PlotStatusHPF.Label = "HPF 0,5 Hz";
+                        sbHPFSelection.Clear();
+                        sbHPFSelection.Append("0.5 Hz");
                     }
                     usbTxData[4] = 1;
                     break;
@@ -519,12 +542,16 @@ namespace Software_EKG_STM32
                     usbTxData[1] = 0;
                     usbTxData[4] = 1;
                     PlotStatusPLF.Label = "Reduksi 50 Hz mati";
+                    sbPLFSelection.Clear();
+                    sbPLFSelection.Append("Off");
                     break;
                 case CheckState.Checked:
                     usbTxData[0] = Convert.ToByte('P');
                     usbTxData[1] = 1;
                     usbTxData[4] = 1;
                     PlotStatusPLF.Label = "Reduksi 50 Hz hidup";
+                    sbPLFSelection.Clear();
+                    sbPLFSelection.Append("On");
                     break;
             }
             plotRealtimeEKG.Render();
@@ -548,18 +575,24 @@ namespace Software_EKG_STM32
                     usbTxData[1] = 0;
                     usbTxData[4] = 1;
                     PlotStatusLPF.Label = "LPF 40 Hz";
+                    sbLPFSelection.Clear();
+                    sbLPFSelection.Append("40 Hz");
                     break;
                 case "75 Hz":
                     usbTxData[0] = Convert.ToByte('L');
                     usbTxData[1] = 1;
                     usbTxData[4] = 1;
                     PlotStatusLPF.Label = "LPF 75 Hz";
+                    sbLPFSelection.Clear();
+                    sbLPFSelection.Append("75 Hz");
                     break;
                 case "150 Hz":
                     usbTxData[0] = Convert.ToByte('L');
                     usbTxData[1] = 2;
                     usbTxData[4] = 1;
                     PlotStatusLPF.Label = "LPF 150 Hz";
+                    sbLPFSelection.Clear();
+                    sbLPFSelection.Append("150 Hz");
                     break;
             }
             plotRealtimeEKG.Render();
@@ -583,12 +616,16 @@ namespace Software_EKG_STM32
                     usbTxData[1] = 1;
                     usbTxData[4] = 1;
                     PlotStatusHPF.Label = "HPF 0,25 Hz";
+                    sbHPFSelection.Clear();
+                    sbHPFSelection.Append("0.25 Hz");
                     break;
                 case "0,5 Hz":
                     usbTxData[0] = Convert.ToByte('L');
                     usbTxData[1] = 2;
                     usbTxData[4] = 1;
                     PlotStatusHPF.Label = "HPF 0,5 Hz";
+                    sbHPFSelection.Clear();
+                    sbHPFSelection.Append("0.5 Hz");
                     break;
             }
             plotRealtimeEKG.Render();
@@ -747,8 +784,10 @@ namespace Software_EKG_STM32
                 using (csvWrite)
                 {
                     // Tulis header identifikasi
-                    csvWrite.WriteLine("ID,Name,BirthDate,Sex,DateTime");
-                    csvWrite.WriteLine(tbRecord_ID.Text + "," + tbRecord_Name.Text + "," + dtRecord_BirthDate.Text + "," + cbRecord_Sex.Text + "," + DateTime.Now.ToString());
+                    csvWrite.WriteLine("ID,Name,BirthDate,Sex,DateTime,Gain,TimeBase,LPF,HPF,MainsFilter");
+                    csvWrite.Write(tbRecord_ID.Text + "," + tbRecord_Name.Text + "," + tbRecord_Age.Text + "," + cbRecord_Sex.Text + "," +
+                                        DateTime.Now.ToString() + ",");
+                    csvWrite.WriteLine(cbGainECG.Text + "," + cbTimebaseECG.Text + "," + sbLPFSelection.ToString() + "," + sbHPFSelection.ToString() + "," + sbPLFSelection.ToString());
                     csvWrite.WriteLine(Environment.NewLine);
                     // Tulis data EKG
                     csvWrite.WriteLine("I,II,V1,V2,V3,V4,V5,V6");   // Lead III dan augmented bisa diekstrak dari lead I dan II
@@ -957,7 +996,7 @@ namespace Software_EKG_STM32
         private void btnRecord_Reset_Click(object sender, EventArgs e)
         {
             tbRecord_Name.Text = "";
-            PlotHeaderBirthDate.Label = "Tgl. Lahir: ";
+            PlotHeaderAge.Label = "Usia: ";
             tbRecord_ID.Text = "0";
         }
 
@@ -978,12 +1017,6 @@ namespace Software_EKG_STM32
             PlotHeaderPatientName.Label += tbRecord_Name.Text;
         }
 
-        private void dtRecord_BirthDate_ValueChanged(object sender, EventArgs e)
-        {
-            PlotHeaderBirthDate.Label = "Tgl. Lahir: ";
-            PlotHeaderBirthDate.Label += dtRecord_BirthDate.Text;
-        }
-
         private void tbRecord_Note_TextChanged(object sender, EventArgs e)
         {
             PlotHeaderNotes.Label = "CATATAN:" + Environment.NewLine;
@@ -1000,6 +1033,12 @@ namespace Software_EKG_STM32
         {
             PlotHeaderPatientID.Label = "ID: ";
             PlotHeaderPatientID.Label += tbRecord_ID.Text;
+        }
+
+        private void tbRecord_Age_TextChanged(object sender, EventArgs e)
+        {
+            PlotHeaderAge.Label = "Usia: ";
+            PlotHeaderAge.Label += tbRecord_Age.Text;
         }
 
         /// <summary>
@@ -1020,7 +1059,7 @@ namespace Software_EKG_STM32
         /// <param name="e"></param>
         private void btnRecord_StartRecord_Click(object sender, EventArgs e)
         {
-            if (!serial.IsOpen)
+            if (!serial.IsOpen && recordStart)
             {
                 MessageBox.Show("EKG tidak aktif!", "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -1037,6 +1076,5 @@ namespace Software_EKG_STM32
                 recordStart = true;
             }
         }
-
     }
 }

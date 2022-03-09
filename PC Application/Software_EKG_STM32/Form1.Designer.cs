@@ -56,7 +56,6 @@ namespace Software_EKG_STM32
             this.label30 = new System.Windows.Forms.Label();
             this.tbRecord_Name = new System.Windows.Forms.TextBox();
             this.label32 = new System.Windows.Forms.Label();
-            this.dtRecord_BirthDate = new System.Windows.Forms.DateTimePicker();
             this.label28 = new System.Windows.Forms.Label();
             this.cbRecord_Sex = new System.Windows.Forms.ComboBox();
             this.tbRecord_Operator = new System.Windows.Forms.TextBox();
@@ -108,6 +107,7 @@ namespace Software_EKG_STM32
             this.timerRenderRealtime = new System.Windows.Forms.Timer(this.components);
             this.workerRender = new System.ComponentModel.BackgroundWorker();
             this.timerUpdateTime = new System.Windows.Forms.Timer(this.components);
+            this.tbRecord_Age = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).BeginInit();
             this.kryptonPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -398,12 +398,12 @@ namespace Software_EKG_STM32
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Controls.Add(this.tbRecord_Age);
             this.panel2.Controls.Add(this.tbRecord_ID);
             this.panel2.Controls.Add(this.label29);
             this.panel2.Controls.Add(this.label30);
             this.panel2.Controls.Add(this.tbRecord_Name);
             this.panel2.Controls.Add(this.label32);
-            this.panel2.Controls.Add(this.dtRecord_BirthDate);
             this.panel2.Controls.Add(this.label28);
             this.panel2.Controls.Add(this.cbRecord_Sex);
             this.panel2.Controls.Add(this.tbRecord_Operator);
@@ -466,26 +466,16 @@ namespace Software_EKG_STM32
             this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label32.Location = new System.Drawing.Point(5, 96);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(85, 13);
+            this.label32.Size = new System.Drawing.Size(32, 13);
             this.label32.TabIndex = 9;
-            this.label32.Text = "Tanggal Lahir";
-            // 
-            // dtRecord_BirthDate
-            // 
-            this.dtRecord_BirthDate.CustomFormat = "dddd dd/MM/yyyy";
-            this.dtRecord_BirthDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtRecord_BirthDate.Location = new System.Drawing.Point(8, 113);
-            this.dtRecord_BirthDate.Name = "dtRecord_BirthDate";
-            this.dtRecord_BirthDate.Size = new System.Drawing.Size(155, 20);
-            this.dtRecord_BirthDate.TabIndex = 11;
-            this.dtRecord_BirthDate.ValueChanged += new System.EventHandler(this.dtRecord_BirthDate_ValueChanged);
+            this.label32.Text = "Usia";
             // 
             // label28
             // 
             this.label28.AutoSize = true;
             this.label28.BackColor = System.Drawing.Color.Transparent;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(5, 144);
+            this.label28.Location = new System.Drawing.Point(78, 96);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(84, 13);
             this.label28.TabIndex = 12;
@@ -499,15 +489,15 @@ namespace Software_EKG_STM32
             "",
             "Laki-Laki",
             "Perempuan"});
-            this.cbRecord_Sex.Location = new System.Drawing.Point(8, 163);
+            this.cbRecord_Sex.Location = new System.Drawing.Point(81, 112);
             this.cbRecord_Sex.Name = "cbRecord_Sex";
-            this.cbRecord_Sex.Size = new System.Drawing.Size(155, 21);
+            this.cbRecord_Sex.Size = new System.Drawing.Size(83, 21);
             this.cbRecord_Sex.TabIndex = 13;
             this.cbRecord_Sex.SelectionChangeCommitted += new System.EventHandler(this.cbRecord_Sex_SelectionChangeCommitted);
             // 
             // tbRecord_Operator
             // 
-            this.tbRecord_Operator.Location = new System.Drawing.Point(7, 212);
+            this.tbRecord_Operator.Location = new System.Drawing.Point(8, 162);
             this.tbRecord_Operator.Name = "tbRecord_Operator";
             this.tbRecord_Operator.Size = new System.Drawing.Size(155, 20);
             this.tbRecord_Operator.TabIndex = 14;
@@ -518,7 +508,7 @@ namespace Software_EKG_STM32
             this.label33.AutoSize = true;
             this.label33.BackColor = System.Drawing.Color.Transparent;
             this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label33.Location = new System.Drawing.Point(5, 193);
+            this.label33.Location = new System.Drawing.Point(5, 144);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(56, 13);
             this.label33.TabIndex = 15;
@@ -529,7 +519,7 @@ namespace Software_EKG_STM32
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(5, 246);
+            this.label4.Location = new System.Drawing.Point(5, 193);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 13);
             this.label4.TabIndex = 19;
@@ -540,10 +530,10 @@ namespace Software_EKG_STM32
             this.tbRecord_Note.AcceptsReturn = true;
             this.tbRecord_Note.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.tbRecord_Note.Location = new System.Drawing.Point(8, 262);
+            this.tbRecord_Note.Location = new System.Drawing.Point(8, 212);
             this.tbRecord_Note.Multiline = true;
             this.tbRecord_Note.Name = "tbRecord_Note";
-            this.tbRecord_Note.Size = new System.Drawing.Size(158, 169);
+            this.tbRecord_Note.Size = new System.Drawing.Size(158, 116);
             this.tbRecord_Note.TabIndex = 20;
             this.tbRecord_Note.TextChanged += new System.EventHandler(this.tbRecord_Note_TextChanged);
             // 
@@ -1249,6 +1239,14 @@ namespace Software_EKG_STM32
             this.timerUpdateTime.Interval = 1000;
             this.timerUpdateTime.Tick += new System.EventHandler(this.timerUpdateTime_Tick);
             // 
+            // tbRecord_Age
+            // 
+            this.tbRecord_Age.Location = new System.Drawing.Point(8, 113);
+            this.tbRecord_Age.Name = "tbRecord_Age";
+            this.tbRecord_Age.Size = new System.Drawing.Size(62, 20);
+            this.tbRecord_Age.TabIndex = 21;
+            this.tbRecord_Age.TextChanged += new System.EventHandler(this.tbRecord_Age_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1377,7 +1375,6 @@ namespace Software_EKG_STM32
         private System.Windows.Forms.TextBox tbHeartRateDisplay;
         private Krypton.Toolkit.KryptonLabel kryptonLabel4;
         private Krypton.Toolkit.KryptonLabel kryptonLabel3;
-        private System.Windows.Forms.DateTimePicker dtRecord_BirthDate;
         private System.Windows.Forms.TextBox tbRecord_Operator;
         private System.Windows.Forms.ComboBox cbRecord_Sex;
         private System.Windows.Forms.Label label28;
@@ -1388,6 +1385,7 @@ namespace Software_EKG_STM32
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox tbRecord_Note;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbRecord_Age;
     }
 }
 
