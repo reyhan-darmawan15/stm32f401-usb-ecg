@@ -20,7 +20,7 @@ My research article currently still in review, but if you need more detail about
 1. The device
 
 ![gambar](https://user-images.githubusercontent.com/57849203/166177218-2b55078a-ece2-4628-bb2a-0d1773bc052f.png)
-![gambar](https://user-images.githubusercontent.com/57849203/166177302-725fda99-37e4-4ef7-b75f-2e6f06ed1bd7.png)
+![IMG_20220311_084740](https://user-images.githubusercontent.com/57849203/166177805-9480be17-2f8c-4be7-84a7-a6f76ba24f98.jpg)
 
 2. Recording progress
 
