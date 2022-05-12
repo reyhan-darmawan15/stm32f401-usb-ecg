@@ -35,6 +35,15 @@ My research article currently still in review, but if you need more detail about
 
 ![00003a_DKA](https://user-images.githubusercontent.com/57849203/166177441-f1575fb3-7c1f-42ed-8e4f-6090c274f7b0.png)
 
+## Video links
+https://streamable.com/7f31w8
+
+https://streamable.com/98i61h
+
+https://streamable.com/k4oaxx
+
+https://streamable.com/wf2lyi
+
 ## Suggestions
 1. Use 24-bit ADC and more sophisticated IC (e.g. ADS1298), or much better with custom IC manufacturing.
 2. Create standalone device version with more powerful STM32 or even DSP.
